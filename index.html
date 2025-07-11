@@ -3,7 +3,7 @@
   <title>Schedule Builder Documentation</title>
   <style>
     body {
-      max-width: 800px;
+      max-width: 1200px;
       margin: 2em auto;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       line-height: 1.6;
@@ -52,9 +52,57 @@
       color: #6a737d;
       border-left: 4px solid #dfe2e5;
     }
+    .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-right: 1px solid #ccc;
+            position: fixed; /* Fix the sidebar to the left */
+            height: 100%; /* Make it full height */
+        }
+        .sidebar h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+        .sidebar ul li a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            margin-left: 300px; /* Add margin to the left to avoid overlap with the sidebar */
+            padding: 15px;
+        }
   </style>
 </head>
 <body>
+<div class="sidebar">
+    <h2>Table of Contents</h2>
+    <ul>
+        <li><h4><a href="#about-us">About Us</a></h4></li>
+        <li><a href="#project-goal">Project Goal</a></li>
+        <li><a href="#project-description">Project Description</a></li>
+        <li><h4><a href="#context-diagram">Context Diagram</a></h4></li>
+        <li><h4><a href="#roadmap">Roadmap</a></h4></li>
+        <li><h4><a href="#testing-user-guide">Testing</a></h4></li>
+        <li><h4><a href="#how-to-install-">Installation</a></h4></li>
+        <li><a href="#development-setup">Development setup</a></li>
+        <li><a href="#deployment">Deployment</a></li>
+        <li><a href="#dependencies-updates">Dependencies updates</a></li>
+        <li><h4><a href="#documentation">Documentation</a></h4></li>
+    </ul>
+</div>
+
+<div class="content">
 <p><a href="https://github.com/SWP2025/schedule-builder-backend/graphs/contributors"><img src="https://img.shields.io/github/contributors/SWP2025/schedule-builder-backend.svg?style=for-the-badge" alt="Contributors"></a>
 <a href="https://github.com/SWP2025/schedule-builder-backend/network/members"><img src="https://img.shields.io/github/forks/SWP2025/schedule-builder-backend.svg?style=for-the-badge" alt="Forks"></a>
 <a href="https://github.com/SWP2025/schedule-builder-backend/stargazers"><img src="https://img.shields.io/github/stars/SWP2025/schedule-builder-backend.svg?style=for-the-badge" alt="Stargazers"></a>
@@ -196,4 +244,5 @@ them and take actions in the table. </p>
 <code>│   └── Continuous Deployment</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/automation/continuous-delivery.md">here</a></strong>
     <br/>
 <code>└── Development</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/CONTRIBUTING.md">here</a></strong></p>
+</div>
 </body>
