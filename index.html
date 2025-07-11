@@ -65,7 +65,7 @@
 <p><br /></p>
 <div align="center">
   <a href="https://github.com/SWP2025/schedule-builder-backend">
-    <img src="/docs/images/logo.png" alt="Logo" width="80" height="80">
+    <img src="tree/main/docs/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Schedule Builder</h3>
@@ -92,127 +92,33 @@ the table for conflicts. Upon successful fetching, the user receives a list of c
 the navigation, conflicts may be <strong>highlighted</strong> (user&#39;s cursor is moved to the conflicting cell) and <strong>ignored</strong> (conflict is
 hidden from the user&#39;s view). The user may repeat scanning until all conflicts are resolved.</p>
 <h2 id="context-diagram">Context Diagram</h2>
-<pre><code class="lang-mermaid">    <span class="hljs-type">C4Context</span>
-      title <span class="hljs-type">System</span> <span class="hljs-type">Context</span> diagram for <span class="hljs-type">Schedule</span> <span class="hljs-type">Builder</span>
-
-
-      <span class="hljs-type">Enterprise_Boundary</span>(<span class="hljs-type">Ecosystem</span>, <span class="hljs-comment">"Schedule Builder Ecosystem"</span>) {
-        <span class="hljs-type">Person</span>(<span class="hljs-type">AuthorizedCustomer</span>, <span class="hljs-comment">"Customer A"</span>, <span class="hljs-comment">"Authorized Department of Education Staff"</span>)
-        <span class="hljs-type">Person</span>(<span class="hljs-type">UnauthorizedCustomer</span>, <span class="hljs-comment">"Customer B"</span>, <span class="hljs-comment">"Unauthorized User"</span>)
-        <span class="hljs-type">Person</span>(<span class="hljs-type">Developer</span>, <span class="hljs-comment">"Developer"</span>, <span class="hljs-comment">"Authorized Developer"</span>)
-
-
-        <span class="hljs-type">System_Boundary</span>(<span class="hljs-type">Integration</span>, <span class="hljs-comment">"InNoHassle Integration System"</span>) {
-                <span class="hljs-type">System</span>(<span class="hljs-type">IAuthorization</span>, <span class="hljs-comment">"Authorization System"</span>, <span class="hljs-comment">"Allows customers to authorize in InNoHassle via Innopolis University SSO"</span>)
-                <span class="hljs-type">System</span>(<span class="hljs-type">IToken</span>, <span class="hljs-comment">"Token Receiving System"</span>, <span class="hljs-comment">"Allows customers to receive their person token to use Schedule Builder"</span>)
-                <span class="hljs-type">SystemDb_Ext</span>(<span class="hljs-type">IDatabase</span>, <span class="hljs-comment">"Innopolis University Server"</span>, <span class="hljs-comment">"Stores all information about students, facultry staff members, and administrators"</span>)
-        }
-
-
-        <span class="hljs-type">System_Boundary</span>(<span class="hljs-type">ScheduleBuilderFrontend</span>, <span class="hljs-comment">"Schedule Builder Plugin"</span>) {
-                <span class="hljs-type">System</span>(<span class="hljs-comment">"SBFTokenChecker"</span>, <span class="hljs-comment">"Token Checker"</span>, <span class="hljs-comment">"Checks the user's token"</span>)
-                <span class="hljs-type">System</span>(<span class="hljs-comment">"SBFCollisionChecker"</span>, <span class="hljs-comment">"Collision Checker"</span>, <span class="hljs-comment">"Checks the Google Spreadsheets table for conflicts"</span>)
-                <span class="hljs-type">System</span>(<span class="hljs-comment">"SBFCollisionDisplayer"</span>, <span class="hljs-comment">"Collision Displayer"</span>, <span class="hljs-comment">"Displays the Google Spreadsheets table conflicts"</span>)
-                <span class="hljs-type">System</span>(<span class="hljs-comment">"SBFCollisionHighlighter"</span>, <span class="hljs-comment">"Collision Highlighter"</span>, <span class="hljs-comment">"Highlights the selected Google Spreadsheets table conflict"</span>)
-                <span class="hljs-type">System</span>(<span class="hljs-comment">"SBFCollisionIgnorer"</span>, <span class="hljs-comment">"Collision Ignorer"</span>, <span class="hljs-comment">"Ignores the selected Google Spreadsheets table conflict"</span>)
-                <span class="hljs-type">SystemDb</span>(<span class="hljs-comment">"SBFIgnoredConflicts"</span>, <span class="hljs-comment">"Ignored Conflicts"</span>, <span class="hljs-comment">"Stores all ignored conflicts"</span>)
-
-        }
-
-
-        <span class="hljs-type">System_Boundary</span>(<span class="hljs-type">ScheduleBuilderBackend</span>, <span class="hljs-comment">"Schedule Builder Backend"</span>) {
-                <span class="hljs-type">System</span>(<span class="hljs-comment">"SBBRouter"</span>, <span class="hljs-comment">"Router"</span>, <span class="hljs-comment">"Manages the requests flow in backend"</span>)
-                <span class="hljs-type">System</span>(<span class="hljs-comment">"SBBParser"</span>, <span class="hljs-comment">"Parser"</span>, <span class="hljs-comment">"Parses the required Google Spreadsheets table data"</span>)
-                <span class="hljs-type">System</span>(<span class="hljs-comment">"SBBOutlook"</span>, <span class="hljs-comment">"Outlook"</span>, <span class="hljs-comment">"Fetches the required information from Outlook schedule"</span>)
-                <span class="hljs-type">System</span>(<span class="hljs-comment">"SBBValidator"</span>, <span class="hljs-comment">"Validator"</span>, <span class="hljs-comment">"Validates the obtained information"</span>)
-        }
-
-
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">AuthorizedCustomer</span>, <span class="hljs-type">IAuthorization</span>, <span class="hljs-comment">"uses"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">IAuthorization</span>, <span class="hljs-type">IDatabase</span>, <span class="hljs-comment">"fetches information from"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">IDatabase</span>, <span class="hljs-type">IToken</span>, <span class="hljs-comment">"successfully authorizes"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">IDatabase</span>, <span class="hljs-type">IAuthorization</span>, <span class="hljs-comment">"unsuccessfully authorizes"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">IToken</span>, <span class="hljs-type">AuthorizedCustomer</span>, <span class="hljs-comment">"returns the token"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">UnauthorizedCustomer</span>, <span class="hljs-type">IAuthorization</span>, <span class="hljs-comment">"uses"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">IAuthorization</span>, <span class="hljs-type">UnauthorizedCustomer</span>, <span class="hljs-comment">"returns error"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">AuthorizedCustomer</span>, <span class="hljs-type">IAuthorization</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"10"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">IAuthorization</span>, <span class="hljs-type">IDatabase</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"grey"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"grey"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"4"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"-100"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">IDatabase</span>, <span class="hljs-type">IToken</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"20"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">IDatabase</span>, <span class="hljs-type">IAuthorization</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"red"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"red"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"60"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"15"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">IToken</span>, <span class="hljs-type">AuthorizedCustomer</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"-80"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">UnauthorizedCustomer</span>, <span class="hljs-type">IAuthorization</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"30"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">IAuthorization</span>, <span class="hljs-type">UnauthorizedCustomer</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"red"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"red"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"-75"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"-20"</span>)
-
-
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">AuthorizedCustomer</span>, <span class="hljs-type">SBFTokenChecker</span>, <span class="hljs-comment">"submits token"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBFTokenChecker</span>, <span class="hljs-type">SBFCollisionChecker</span>, <span class="hljs-comment">"successfully redirects"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBFCollisionChecker</span>, <span class="hljs-type">SBBRouter</span>, <span class="hljs-comment">"sends a request to"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBBRouter</span>, <span class="hljs-type">SBBParser</span>, <span class="hljs-comment">"requests parsing from"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBBRouter</span>, <span class="hljs-type">SBBOutlook</span>, <span class="hljs-comment">"requests information from"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBBParser</span>, <span class="hljs-type">SBBValidator</span>, <span class="hljs-comment">"sends information to"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBBOutlook</span>, <span class="hljs-type">SBBValidator</span>, <span class="hljs-comment">"sends information to"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBBValidator</span>, <span class="hljs-type">SBBRouter</span>, <span class="hljs-comment">"sends validated information"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">AuthorizedCustomer</span>, <span class="hljs-type">SBFTokenChecker</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"15"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBBParser</span>, <span class="hljs-type">SBBValidator</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"-125"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"100"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBBRouter</span>, <span class="hljs-type">SBBOutlook</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"80"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"15"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBBRouter</span>, <span class="hljs-type">SBBParser</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"-5"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBFCollisionChecker</span>, <span class="hljs-type">SBBRouter</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"-40"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"-50"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBBOutlook</span>, <span class="hljs-type">SBBValidator</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"0"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"10"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBFTokenChecker</span>, <span class="hljs-type">SBFCollisionChecker</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"15"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBBRouter</span>, <span class="hljs-type">SBBOutlook</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"-100"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"-160"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBBValidator</span>, <span class="hljs-type">SBBRouter</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"-145"</span>)
-
-
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBBRouter</span>, <span class="hljs-type">SBFCollisionChecker</span>, <span class="hljs-comment">"sends collisions information to"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBFCollisionChecker</span>, <span class="hljs-type">SBFCollisionDisplayer</span>, <span class="hljs-comment">"displays received collisions"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBFCollisionDisplayer</span>, <span class="hljs-type">SBFCollisionHighlighter</span>, <span class="hljs-comment">"requests to highlight the conflict"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBFCollisionHighlighter</span>, <span class="hljs-type">SBFCollisionDisplayer</span>, <span class="hljs-comment">"highlights the conflict"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBFCollisionDisplayer</span>, <span class="hljs-type">SBFCollisionIgnorer</span>, <span class="hljs-comment">"requests to ignore/display the conflict"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBFCollisionIgnorer</span>, <span class="hljs-type">SBFIgnoredConflicts</span>, <span class="hljs-comment">"stores/deletes a mentioned conflict"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">SBFCollisionIgnorer</span>, <span class="hljs-type">SBFCollisionDisplayer</span>, <span class="hljs-comment">"ignored/displayed the conflict"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBFCollisionDisplayer</span>, <span class="hljs-type">SBFCollisionHighlighter</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"-20"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBFCollisionHighlighter</span>, <span class="hljs-type">SBFCollisionDisplayer</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"20"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"10"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBFCollisionDisplayer</span>, <span class="hljs-type">SBFCollisionIgnorer</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"blue"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"100"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"15"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBFCollisionIgnorer</span>, <span class="hljs-type">SBFIgnoredConflicts</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"gray"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"gray"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"10"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBFCollisionIgnorer</span>, <span class="hljs-type">SBFCollisionDisplayer</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"-100"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"-160"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBFCollisionChecker</span>, <span class="hljs-type">SBFCollisionDisplayer</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"10"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">SBBRouter</span>, <span class="hljs-type">SBFCollisionChecker</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"green"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"15"</span>)
-
-
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">Developer</span>, <span class="hljs-type">IAuthorization</span>, <span class="hljs-comment">"maintains"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">Developer</span>, <span class="hljs-type">SBFTokenChecker</span>, <span class="hljs-comment">"maintains"</span>)
-        <span class="hljs-type">Rel</span>(<span class="hljs-type">Developer</span>, <span class="hljs-type">SBBRouter</span>, <span class="hljs-comment">"maintains"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">Developer</span>, <span class="hljs-type">IAuthorization</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"purple"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"purple"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"-10"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"-10"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">Developer</span>, <span class="hljs-type">SBFTokenChecker</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"purple"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"purple"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"10"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"-10"</span>)
-        <span class="hljs-type">UpdateRelStyle</span>(<span class="hljs-type">Developer</span>, <span class="hljs-type">SBBRouter</span>, <span class="hljs-string">$t</span>extColor=<span class="hljs-comment">"purple"</span>, <span class="hljs-string">$l</span>ineColor=<span class="hljs-comment">"purple"</span>, <span class="hljs-string">$o</span>ffsetX=<span class="hljs-comment">"-40"</span>, <span class="hljs-string">$o</span>ffsetY=<span class="hljs-comment">"-10"</span>)
-
-
-        <span class="hljs-type">UpdateLayoutConfig</span>(<span class="hljs-string">$c</span>4ShapeInRow=<span class="hljs-comment">"3"</span>, <span class="hljs-string">$c</span>4BoundaryInRow=<span class="hljs-comment">"4"</span>)
-      }
+<a href="https://github.com/SWP2025/SWP2025.github.io">
+    <img src="tree/main/images/context.svg" alt="Context Diagram" width="300" height="300">
+</a>
 </code></pre>
 <h2 id="roadmap">Roadmap</h2>
 <ul>
-<li>[x] <strong>MVP v0</strong></li>
-<li>[x] <strong>MVP v1</strong> <ul>
-<li>[x] Plugin Creation</li>
-<li>[x] Teacher Conflicts handling</li>
-<li>[x] Capacity Conflicts handling</li>
+<li>[V] <strong>MVP v0</strong></li>
+<li>[V] <strong>MVP v1</strong> <ul>
+<li>[V] Plugin Creation</li>
+<li>[V] Teacher Conflicts handling</li>
+<li>[V] Capacity Conflicts handling</li>
 </ul>
 </li>
-<li>[x] <strong>MVP v1.5</strong><ul>
-<li>[x] Integration Tests</li>
-<li>[x] Unit Tests</li>
+<li>[V] <strong>MVP v1.5</strong><ul>
+<li>[V] Integration Tests</li>
+<li>[V] Unit Tests</li>
 </ul>
 </li>
-<li>[x] <strong>MVP v2</strong><ul>
-<li>[x] Improved parser functionality</li>
-<li>[x] Additional Integration Tests</li>
-<li>[x] Additional Unit Tests</li>
+<li>[V] <strong>MVP v2</strong><ul>
+<li>[V] Improved parser functionality</li>
+<li>[V] Additional Integration Tests</li>
+<li>[V] Additional Unit Tests</li>
 </ul>
 </li>
-<li>[ ] <strong>MVP v3</strong><ul>
-<li>[ ] Automatic Collisions Fixing</li>
-<li>[ ] Staff Preferences</li>
+<li>[?] <strong>MVP v3</strong><ul>
+<li>[?] Automatic Collisions Fixing</li>
+<li>[?] Staff Preferences</li>
 </ul>
 </li>
 </ul>
@@ -244,10 +150,8 @@ them and take actions in the table. </p>
 </li>
 </ol>
 <blockquote>
-<p>[!IMPORTANT]
-For endpoints requiring authorization, click &quot;Authorize&quot; button in Swagger UI!</p>
-<p>[!TIP]
-Edit <code>settings.yaml</code> according to your needs, you can view schema in <a href="settings.schema.yaml">settings.schema.yaml</a>.</p>
+<p>For endpoints requiring authorization, click &quot;Authorize&quot; button in Swagger UI!</p>
+<p>Edit <code>settings.yaml</code> according to your needs, you can view schema in <a href="settings.schema.yaml">settings.schema.yaml</a>.</p>
 </blockquote>
 <h3 id="deployment">Deployment</h3>
 <p>We use Docker with Docker Compose plugin to run the service on servers.</p>
@@ -264,19 +168,29 @@ Edit <code>settings.yaml</code> according to your needs, you can view schema in 
 <li>Run <code>uv pip list --outdated</code> to check for outdated dependencies.</li>
 </ol>
 <h2 id="documentation">Documentation</h2>
-<p><code>.</code> \
-<code>├── Quality characteristics and attribute scenarios</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/quality-attributes/quality-attribute-scenarios.md">here</a></strong> \
-<code>├── Architecture</code> \
-<code>│   ├── Static view</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/architecture/static-view/static-view.md">here</a></strong> \
-<code>│   ├── Dynamic view</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/architecture/dynamic-view/dynamic-view.md">here</a></strong> \
-<code>│   └── Deployment view</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/architecture/deployment-view/deployment-view.md">here</a></strong> \
-<code>├── Quality assurance</code> \
-<code>│   ├── Automated tests</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/quality-assurance/automated-tests.md">here</a></strong> \
-<code>│   └── User acceptance tests</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/quality-assurance/user-acceptance-tests.md">here</a></strong> \
-<code>├── Build and deployment automation</code> \
-<code>│   ├── Continuous Integration</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/automation/continuous-integration.md">here</a></strong> \
-<code>│   └── Continuous Deployment</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/automation/continuous-delivery.md">here</a></strong> \
+<p><code>.</code>
+  
+<code>├── Quality characteristics and attribute scenarios</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/quality-attributes/quality-attribute-scenarios.md">here</a></strong>
+  
+<code>├── Architecture</code>
+  
+<code>│   ├── Static view</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/architecture/static-view/static-view.md">here</a></strong>
+  
+<code>│   ├── Dynamic view</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/architecture/dynamic-view/dynamic-view.md">here</a></strong>
+  
+<code>│   └── Deployment view</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/architecture/deployment-view/deployment-view.md">here</a></strong>
+  
+<code>├── Quality assurance</code>
+  
+<code>│   ├── Automated tests</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/quality-assurance/automated-tests.md">here</a></strong>
+  
+<code>│   └── User acceptance tests</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/quality-assurance/user-acceptance-tests.md">here</a></strong>
+  
+<code>├── Build and deployment automation</code>
+  
+<code>│   ├── Continuous Integration</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/automation/continuous-integration.md">here</a></strong>
+  
+<code>│   └── Continuous Deployment</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/docs/automation/continuous-delivery.md">here</a></strong>
+  
 <code>└── Development</code> <strong><a href="https://github.com/SWP2025/schedule-builder-backend/tree/main/CONTRIBUTING.md">here</a></strong></p>
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 </body>
